@@ -6,6 +6,9 @@
 class AxisModuleRouting
 {
   protected $routes = array();
+  /**
+   * @var sfApplicationConfiguration
+   */
   protected $configuration;
 
   public function __construct(sfProjectConfiguration $configuration)
@@ -36,18 +39,30 @@ class AxisModuleRouting
       return;
     }
 
+    $prepend = array();
+    $append = array();
+
     foreach ($this->routes as $name => $route)
     {
-      /* @var $route sfRoute */
+      /** @var $route sfRoute */
       $options = $route->getOptions();
       if (isset($options['position']) && $options['position'] == 'last')
       {
-        $routing->appendRoute($name, $route);
+        $append[$name] = $route;
       }
       else
       {
-        $routing->prependRoute($name, $route);
+        $prepend[$name] = $route;
       }
+    }
+
+    foreach (array_reverse($prepend) as $name => $route)
+    {
+      $routing->prependRoute($name, $route);
+    }
+    foreach ($append as $name => $route)
+    {
+      $routing->appendRoute($name, $route);
     }
   }
 
