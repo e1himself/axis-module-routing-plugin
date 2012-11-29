@@ -1,6 +1,23 @@
 AxisModuleRouting Plugin
 ========================
 
+Installation
+------------
+
+### Composer way
+
+Just add `axis/axis-module-routing-plugin` dependency to your `composer.json` file:
+```
+  "require": {
+    "axis/axis-module-routing-plugin": "dev-master"
+  }
+```
+
+### Git way
+
+Also you can clone `https://github.com/e1himself/axis-module-routing-plugin.git` to `plugins/AxisModuleRoutingPlugin` 
+folder in your project.
+
 Usage
 -----
 
