@@ -1,0 +1,26 @@
+{
+  "name": "axis/axis-module-routing-plugin",
+  "description": "symfony 1.x plugin that allows you to define routing configuration at module level.",
+
+  "type": "symfony1-plugin",
+  "extra": {
+    "installer-name": "AxisModuleRoutingPlugin"
+  },
+
+  "keywords": ["symfony", "routing", "plugin"],
+  "license": "MIT",
+  "homepage": "https://github.com/e1himself/axis-module-routing-plugin",
+
+  "authors": [
+    {
+      "name": "Ivan Voskoboynyk",
+      "email": "ioann.voskoboynyk@gmail.com",
+      "homepage": "https://github.com/e1himself"
+    }
+  ],
+  "version": "1.0.0",
+
+  "require": {
+    "composer/installers": "*"
+  }
+}
