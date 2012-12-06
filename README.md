@@ -7,7 +7,7 @@ Installation
 ### Composer way
 
 Just add `axis/axis-module-routing-plugin` dependency to your `composer.json` file:
-```
+```json
   "require": {
     "axis/axis-module-routing-plugin": "dev-master"
   }
