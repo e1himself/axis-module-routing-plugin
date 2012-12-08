@@ -31,3 +31,9 @@ All routes defined in `module_routing.yml` from enabled modules' config folders 
 You can define `position` of a route to tell where it should be added to applicaiton routing: at the end or at the beginning. 
 The only supported value for now is `last` - route will be appended to the end. Otherwise it will be prepended.
 Default is to prepend.
+
+
+Known Issues
+------------
+* `module_routing.yml` configuration files in your project's application modules will be not handled unless your 
+  explicitly specify module as enabled in your applicaiton's `settings.yml`.
