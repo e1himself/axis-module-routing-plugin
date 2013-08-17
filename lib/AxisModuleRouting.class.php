@@ -16,22 +16,56 @@ class AxisModuleRouting
     $this->configuration = $configuration;
   }
 
-  public function listenToRoutingLoadConfigurationEvent(sfEvent $event)
+  /**
+   * @param sfRouting $routing
+   * @param array|string[] $modules
+   * @return array
+   */
+  private function loadModuleRouting($routing, $modules = null)
   {
+    $routingOptions = $routing->getOptions();
+
+    $modules = $modules === null ? sfConfig::get('sf_enabled_modules') : $modules;
+
     /** @var $configCache sfConfigCache */
     $configCache = $this->configuration->getConfigCache();
+    $configCache->registerConfigHandler('config/module_routing.yml', 'AxisModuleRoutingConfigHandler', array('routing_options' => $routingOptions));
 
-    $routing = $event->getSubject();
-    $routingOptions = $routing->getOptions();
-    $configCache->registerConfigHandler('config/module_routing.yml', "AxisModuleRoutingConfigHandler", array('routing_options' => $routingOptions));
-
-    foreach (sfConfig::get('sf_enabled_modules') as $module)
+    $usedModules = array();
+    foreach ($modules as $module)
     {
       $cached = $configCache->checkConfig("modules/$module/config/module_routing.yml", true);
       if ($cached)
       {
+        $usedModules[] = $module;
         include $cached;
       }
+    }
+    return $usedModules;
+  }
+
+  public function listenToRoutingLoadConfigurationEvent(sfEvent $event)
+  {
+    $routing = $event->getSubject();
+
+    if (!sfConfig::get('sf_debug')) // handle caching in non-debug environment
+    {
+      $cache = new sfFileCache(array('cache_dir' => sfConfig::get('sf_app_cache_dir')));
+      $key = __CLASS__.'/modules';
+
+      if ($cache->has($key))
+      {
+        $modules = unserialize($cache->get($key));
+        $this->loadModuleRouting($routing, $modules);
+      }
+      else {
+        $modules = $this->loadModuleRouting($routing);
+        $cache->set($key, serialize($modules));
+      }
+    }
+    else
+    {
+      $this->loadModuleRouting($routing);
     }
 
     if (!count($this->routes))
@@ -60,10 +94,10 @@ class AxisModuleRouting
     {
       $routing->prependRoute($name, $route);
     }
+
     foreach ($append as $name => $route)
     {
       $routing->appendRoute($name, $route);
     }
   }
-
 }
