@@ -79,6 +79,10 @@ class AxisModuleRouting
     foreach ($this->routes as $name => $route)
     {
       /** @var $route sfRoute */
+      if (is_string($route))
+      {
+        $route = unserialize($route);
+      }
       $options = $route->getOptions();
       if (isset($options['position']) && $options['position'] == 'last')
       {
